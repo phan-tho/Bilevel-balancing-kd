@@ -24,8 +24,8 @@ python bileval_balancing_kd.py --dataset cifar100 --teacher_path your_path_here.
 ```
 
 ### 3.2 Baseline
-This repository currently support 5 methods:
-kd', 'ce', 'dive', 'bkd', 'wsl
+This repository currently support 5 baseline methods:
+kd, ce, dive, bkd, wsl
 - `ce` - standard cross entropy loss
 - `kd` - vanilla knowledge distillation
 - `dive` - distill from virtual examples
@@ -41,14 +41,14 @@ python train_student.py --dataset cifar100 --imb_factor 100 --teacher_ckpt_path 
 Below is a description of the key arguments used in the scripts:
 | Argument                 | Description                                                 |
 | ------------------------ | ----------------------------------------------------------- |
-| `--dataset`               | Data to use (e.g. `cifar10`, `cifar100`      |
+| `--dataset`               | Data to use (e.g. `cifar10`, `cifar100`)      |
 | `--imb_factor`       | Imbalance factor for long-tailed datasets (1, 10, 50, 100) |
 | `--teacher_arch` | Architecture of the teacher network (e.g., `resnet32x4`). |
 | `--student_arch` | Architecture of the student network (e.g., `resnet8x4`). |
 | `--teacher_ckpt_path` | Path to the pre-trained teacher model checkpoint. |
 | `--kd_type`              | KD method (`kd`, `ce`, `dive`, `bkd`, `wsl`). Default: `kd`.|
 | `--alpha`                | Balancing weight for the loss function. Default: `0.5`.     |
-| `--power`                | (Flag) Use power normalization (p=0.5) for teacher probs.   |
+| `--temperature`          | Temperature scaling parameter for Softmax. Default: `4.0`.   |
 
 Specialize arguments for Bilevel balancing KD
 | Argument                 | Description                                                 |
