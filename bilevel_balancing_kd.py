@@ -27,8 +27,8 @@ parser.add_argument('--teacher_ckpt', default='teacher_cifar100.pth', type=str)
 parser.add_argument('--l_meta', default='hard', help='mix/hard/soft')
 parser.add_argument('--imb_factor', default=1, type=float, help='imbalance factor, larger means more imbalance')
 parser.add_argument('--hidden_wnet', default=[64, 64], nargs='+', type=int,
-                    help='hidden layers for wnet')
-parser.add_argument('--inner_accum_steps', default=1, type=int, help='accumulation steps for inner update of inner model')
+                    help='hidden layers for wnet, recommend use [64, 64] for cifar100 and [64] for cifar10')
+parser.add_argument('--inner_accum_steps', default=5, type=int, help='accumulation steps for inner update of inner model')
 parser.set_defaults(augment=True)
 args = parser.parse_args()
 

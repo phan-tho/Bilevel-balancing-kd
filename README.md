@@ -1,53 +1,61 @@
 ## 1. Overview
 
-This is the Pytorch implementation for "Efficient Bilevel Optimization for Noisy Labels Learning using Meta Label Correction Framework". This repo is based on several MLC implementations.
+This is the Pytorch implementation for "Balancing Knowledge Distillation for Imbalance Learning with Bilevel Optimization".
 
-Authors: Ba Hoang Anh Nguyen, Cuong Ta
+Authors: Ba Tho Phan, Ba Hoang Anh Nguyen, Viet Cuong Ta
 
 <p align="center">
-  <img src="figures/EBOMLC.png" alt="Framework of EBOMLC">
+  <img src="figures/overview_framework.png" alt="Framework of Bilevel-BKD">
 </p>
 
 ## 2. Setup
 
 ### 2.1 Environment
-`pip install -r requirement.txt`
+To install the required dependencies, run: `pip install -r requirement.txt`
 
 ### 2.2 Computational Resources
 All experiments run in Kaggle notebook.
 
-## 3. Experiments
-### 3.1 This repository currently supports three methods:
-
-- `mlc` — Baseline Meta Label Correction  
-- `mlcbome` — MLC with BOME updates  
-- `ebomlc` — Efficient bi-level optimization for MLC
-
-### 3.2 To run these methods:
+## 3. Usage & Experiments
+### 3.1 Proposed Method (Meta-Balancing)
+To train the student model using our proposed bilevel optimization method, run the `bilevel_balancing_kd.py` script.
 ```
-python main.py --method ebomlc --dataset cifar100 --optimizer sgd --bs 100 \
-  --corruption_type unif --corruption_level 0.8 --gold_fraction 0.02 \
-  --epochs 120 --main_lr 0.1 --meta_lr 3e-4 --runid ebomlc_c100_u80 --cls_dim 128 \
-  --rho 0.2 --xi 0.5 --delta 0.25
+python bileval_balancing_kd.py --dataset cifar100 --teacher_path your_path_here.pth --imb_factor 100 --inner_accum_steps 5
 ```
+
+### 3.2 Baseline
+This repository currently support 5 methods:
+kd', 'ce', 'dive', 'bkd', 'wsl
+- `ce` - standard cross entropy loss
+- `kd` - vanilla knowledge distillation
+- `dive` - distill from virtual examples
+- `bkd` - balanced knowledge distillation
+- `wsl` - weighted soft labels
+
+To train a standard student model without meta-balancing, run the `train_student.py` script.
+```
+python train_student.py --dataset cifar100 --imb_factor 100 --teacher_ckpt_path your_path_here.pth --kd_type dive --alpha 0.5 --power
+```
+
+### 3.3 Arguments
+Below is a description of the key arguments used in the scripts:
 | Argument                 | Description                                                 |
 | ------------------------ | ----------------------------------------------------------- |
-| `--method`               | Training method (options: `ebomlc`, `mlc`, `mlcbome`).      |
-| `--dataset`              | Dataset to use (`cifar10` or `cifar100`).                   |
-| `--optimizer`            | Optimizer for the main network.                             |
-| `--bs`                   | Batch size for training data.                               |
-| `--corruption_type`      | Noise type (`unif`, `flip`).                                |
-| `--corruption_level`     | Noise ratio (e.g., `0.4` = 40% noisy labels).               |
-| `--gold_fraction`        | Fraction of clean (gold) data.                              |
-| `--epochs`               | Number of training epochs.                                  |
-| `--main_lr`              | Learning rate for the main network.                         |
-| `--meta_lr`              | Learning rate for the meta network.                         |
-| `--runid`                | Identifier for logs and checkpoints.                        |
-| `--cls_dim`              | Dimension of label embedding in the meta model.             |
+| `--dataset`               | Data to use (e.g. `cifar10`, `cifar100`      |
+| `--imb_factor`       | Imbalance factor for long-tailed datasets (1, 10, 50, 100) |
+| `--teacher_arch` | Architecture of the teacher network (e.g., `resnet32x4`). |
+| `--student_arch` | Architecture of the student network (e.g., `resnet8x4`). |
+| `--teacher_ckpt_path` | Path to the pre-trained teacher model checkpoint. |
+| `--kd_type`              | KD method (`kd`, `ce`, `dive`, `bkd`, `wsl`). Default: `kd`.|
+| `--alpha`                | Balancing weight for the loss function. Default: `0.5`.     |
+| `--power`                | (Flag) Use power normalization (p=0.5) for teacher probs.   |
+
+Specialize arguments for Bilevel balancing KD
+| Argument                 | Description                                                 |
+| ------------------------ | ----------------------------------------------------------- |
+| `--hidden_wnet` | Hidden layers for wnet |
+| `--inner_accum_steps` | Accumulation steps for inner update of inner model |
 
 
-## 4. Baselines
-For the baselines, please follow these repos and papers:
-- [MW-net](https://github.com/xjtushujun/meta-weight-net)
-- [L2RW](https://github.com/uber-research/learning-to-reweight-examples)
-- [GLC](https://github.com/mmazeika/glc)
+## 4. Acknowledgement
+We thank the Pytorch implementation on [mwn](https://github.com/xjtushujun/meta-weight-net). We appreciate the following open-source repositories, which we used as baselines for our experiments [bkd](https://github.com/EricZsy/BalancedKnowledgeDistillation) and [wsl](https://github.com/bellymonster/Weighted-Soft-Label-Distillation)

@@ -5,9 +5,6 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.backends.cudnn as cudnn
 
-import os
-import sys
-
 from cifar import build_dataset
 from model import get_model
 from loss_fn import DiVELoss, KDLoss, BKDLoss, WSLLoss
