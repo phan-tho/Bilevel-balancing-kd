@@ -2,30 +2,35 @@
 
 This is the Pytorch implementation for "Balancing Knowledge Distillation for Imbalance Learning with Bilevel Optimization".
 
-Authors: Ba Tho Phan, Ba Hoang Anh Nguyen, Viet Cuong Ta
+Authors: Ba Tho Phan, Ba Hoang Anh Nguyen, Viet Cuong Ta.
 
 <p align="center">
-  <img src="figures/overview_framework.png" alt="Framework of Bilevel-BKD">
+  <img src="figures/overview_framework.png" alt="Framework of BiKD">
 </p>
 
 ## 2. Setup
 
-### 2.1 Environment
-To install the required dependencies, run: `pip install -r requirement.txt`
+### 2.1. Environment
+To install the required dependencies, run: `pip install -r requirement.txt`.
 
-### 2.2 Computational Resources
+### 2.2. Computational Resources
 All experiments run in Kaggle notebook.
 
 ## 3. Usage & Experiments
-### 3.1 Proposed Method (Meta-Balancing)
+### 3.1. Proposed Method (BiKD)
 To train the student model using our proposed bilevel optimization method, run the `bilevel_balancing_kd.py` script.
+#### Example run
+On CIFAR100, run BiKD with exponential imbalance with imbalance factor of 100 by executing
 ```
 python bileval_balancing_kd.py --dataset cifar100 --teacher_path your_path_here.pth --imb_factor 100 --inner_accum_steps 5
 ```
+On CIFAR10, run BiKD as
+```
+python bileval_balancing_kd.py --dataset cifar10 --teacher_path your_path_here.pth --imb_factor 100 --inner_accum_steps 1 --hidden_wnet 64 --l_meta mix
+```
 
-### 3.2 Baseline
+### 3.2. Baseline
 This repository currently support 5 baseline methods:
-kd, ce, dive, bkd, wsl
 - `ce` - standard cross entropy loss
 - `kd` - vanilla knowledge distillation
 - `dive` - distill from virtual examples
@@ -37,7 +42,7 @@ To train a standard student model without meta-balancing, run the `train_student
 python train_student.py --dataset cifar100 --imb_factor 100 --teacher_ckpt_path your_path_here.pth --kd_type dive --alpha 0.5 --power
 ```
 
-### 3.3 Arguments
+### 3.3. Arguments
 Below is a description of the key arguments used in the scripts:
 | Argument                 | Description                                                 |
 | ------------------------ | ----------------------------------------------------------- |
@@ -46,9 +51,9 @@ Below is a description of the key arguments used in the scripts:
 | `--teacher_arch` | Architecture of the teacher network (e.g., `resnet32x4`). |
 | `--student_arch` | Architecture of the student network (e.g., `resnet8x4`). |
 | `--teacher_ckpt_path` | Path to the pre-trained teacher model checkpoint. |
-| `--kd_type`              | KD method (`kd`, `ce`, `dive`, `bkd`, `wsl`). Default: `kd`.|
-| `--alpha`                | Balancing weight for the loss function. Default: `0.5`.     |
-| `--temperature`          | Temperature scaling parameter for Softmax. Default: `4.0`.   |
+| `--kd_type`              | KD method (`kd`, `ce`, `dive`, `bkd`, `wsl`).|
+| `--alpha`                | Balancing weight for the loss function.     |
+| `--temperature`          | Temperature scaling parameter for Softmax.   |
 
 Specialize arguments for Bilevel balancing KD
 | Argument                 | Description                                                 |
@@ -58,4 +63,4 @@ Specialize arguments for Bilevel balancing KD
 
 
 ## 4. Acknowledgement
-We thank the Pytorch implementation on [mwn](https://github.com/xjtushujun/meta-weight-net). We appreciate the following open-source repositories, which we used as baselines for our experiments [bkd](https://github.com/EricZsy/BalancedKnowledgeDistillation) and [wsl](https://github.com/bellymonster/Weighted-Soft-Label-Distillation)
+We thank the Pytorch implementation on [mwn](https://github.com/xjtushujun/meta-weight-net). We appreciate the following open-source repositories, which we used as baselines for our experiments [bkd](https://github.com/EricZsy/BalancedKnowledgeDistillation) and [wsl](https://github.com/bellymonster/Weighted-Soft-Label-Distillation).
