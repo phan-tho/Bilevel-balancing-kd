@@ -2,7 +2,7 @@
 
 This is the Pytorch implementation for "Balancing Knowledge Distillation for Imbalance Learning with Bilevel Optimization".
 
-Authors: Ba Tho Phan, Ba Hoang Anh Nguyen, Viet Cuong Ta.
+<!-- Authors: Ba Tho Phan, Ba Hoang Anh Nguyen, Viet Cuong Ta. -->
 
 <p align="center">
   <img src="figures/overview_framework.png" alt="Framework of BiKD">
